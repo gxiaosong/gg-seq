@@ -12,7 +12,7 @@ import (
 var ProviderSet = wire.NewSet(
 	NewDB,
 	NewData,
-	NewGreeterRepo,
+	NewSeqRepo,
 )
 
 // Data .
@@ -46,7 +46,9 @@ func NewDB(conf *conf.Data, logger log.Logger) *gorm.DB {
 		log.Fatalf("failed opening connection to mysql: %v", err)
 	}
 
-	if err := db.AutoMigrate(); err != nil {
+	if err := db.AutoMigrate(
+		&Segment{},
+	); err != nil {
 		log.Fatal(err)
 	}
 	return db
