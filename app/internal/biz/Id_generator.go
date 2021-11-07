@@ -44,6 +44,7 @@ func NewCachedIdGenerator(bizType string, service SegmentService) *CachedIdGener
 
 func (c *CachedIdGenerator) loadCurrent() {
 	c.mu.Lock()
+	defer c.mu.Unlock()
 	if c.Current == nil {
 		if c.Next == nil {
 			c.Current = c.querySegment()
@@ -52,7 +53,7 @@ func (c *CachedIdGenerator) loadCurrent() {
 			c.Next = nil
 		}
 	}
-	defer c.mu.Unlock()
+
 }
 
 func (c *CachedIdGenerator) querySegment() *Segment {
