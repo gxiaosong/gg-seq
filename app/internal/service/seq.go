@@ -11,14 +11,22 @@ import (
 type SeqService struct {
 	v1.UnimplementedSeqServer
 
-	uc  *biz.SeqUsecase
-	log *log.Helper
+	uc        *biz.SeqUsecase
+	idFactory *biz.IdGeneratorFactory
+	log       *log.Helper
 }
 
-func NewSeqService(uc *biz.SeqUsecase, logger log.Logger) *SeqService {
-	return &SeqService{uc: uc, log: log.NewHelper(logger)}
+func NewSeqService(uc *biz.SeqUsecase, idFactory *biz.IdGeneratorFactory, logger log.Logger) *SeqService {
+	return &SeqService{
+		uc:        uc,
+		idFactory: idFactory,
+		log:       log.NewHelper(logger),
+	}
 }
 
-func (seq *SeqService) GetId(context.Context, *v1.GetIdReq) (*v1.GetIdResp, error) {
-	return nil, nil
+func (seq *SeqService) GetId(ctx context.Context, req *v1.GetIdReq) (*v1.GetIdResp, error) {
+	idGen := seq.idFactory.GetGenerator(req.BizType)
+	return &v1.GetIdResp{
+		Id: idGen.NextId(),
+	}, nil
 }

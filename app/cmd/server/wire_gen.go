@@ -27,7 +27,8 @@ func initApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	}
 	seqRepo := data.NewSeqRepo(dataData, logger)
 	seqUsecase := biz.NewSeqUsecase(seqRepo, logger)
-	seqService := service.NewSeqService(seqUsecase, logger)
+	idGeneratorFactory := biz.NewIdGeneratorFactory(logger, seqUsecase)
+	seqService := service.NewSeqService(seqUsecase, idGeneratorFactory, logger)
 	httpServer := server.NewHTTPServer(confServer, seqService, logger)
 	grpcServer := server.NewGRPCServer(confServer, seqService, logger)
 	app := newApp(logger, httpServer, grpcServer)
