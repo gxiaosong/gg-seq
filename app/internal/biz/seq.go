@@ -1,6 +1,7 @@
 package biz
 
 import (
+	"errors"
 	"sync/atomic"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -12,6 +13,10 @@ const (
 	Over ResultCode = iota
 	Loading
 	Normal
+)
+
+const (
+	Retry = 3
 )
 
 type Result struct {
@@ -64,8 +69,13 @@ func (uc *SeqUsecase) GetNextSegment(bizType string) (*Segment, error) {
 		s   *Segment
 		err error
 	)
-	if s, err = uc.repo.GetNextSegment(bizType); err != nil {
-		return nil, err
+	for i := 0; i <= Retry; i++ {
+		if s, err = uc.repo.GetNextSegment(bizType); err != nil && (!errors.Is(err, ErrNotUpdated) || i == Retry) {
+			return nil, err
+		}
+		if s != nil {
+			break
+		}
 	}
 	return s, nil
 }

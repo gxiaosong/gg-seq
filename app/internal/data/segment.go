@@ -49,6 +49,7 @@ func (repo *seqRepo) GetNextSegment(bizType string) (*biz.Segment, error) {
 			repo.log.Errorw(err)
 		}
 	}()
+
 	err = repo.data.db.Transaction(func(tx *gorm.DB) error {
 		var result *gorm.DB
 		if result = tx.Where(&Segment{BizType: bizType}).First(&seg); result.Error != nil {
@@ -65,10 +66,10 @@ func (repo *seqRepo) GetNextSegment(bizType string) (*biz.Segment, error) {
 		}
 		if result.RowsAffected == 1 {
 			seg.MaxId = newMaxId
+			return nil
 		}
-		return nil
+		return biz.ErrNotUpdated
 	}, &sql.TxOptions{Isolation: sql.LevelReadCommitted})
-
 	if err != nil {
 		return nil, err
 	}
