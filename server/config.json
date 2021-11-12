@@ -1,0 +1,9 @@
+{
+    "database":[
+        {
+            "name":"db1",
+            "driver":"mysql",
+            "url":"root:123456@tcp(127.0.0.1:3306)/gg-seq?parseTime=true"
+        }
+    ]
+}

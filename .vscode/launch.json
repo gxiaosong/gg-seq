@@ -9,7 +9,7 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/app/cmd/server",
+            "program": "${workspaceFolder}/server/",
             "env": {},
             "args": [],
         }
