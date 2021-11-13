@@ -1,6 +1,7 @@
 package data
 
 import (
+	"context"
 	"database/sql"
 
 	"github.com/gouez/gg-seq/server/config"
@@ -42,4 +43,8 @@ func (d *Data) Close() {
 	for _, value := range d.DB {
 		value.Close()
 	}
+}
+
+func (d *Data) GetDB(ctx context.Context, defaultDBName string) {
+
 }
