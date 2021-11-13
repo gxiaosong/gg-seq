@@ -6,11 +6,13 @@ import (
 )
 
 type Config struct {
-	Database []struct {
-		Name   string `json:"name"`
-		Driver string `json:"driver"`
-		URL    string `json:"url"`
-	} `json:"database"`
+	Database []Database `json:"database"`
+}
+
+type Database struct {
+	Name   string `json:"name"`
+	Driver string `json:"driver"`
+	URL    string `json:"url"`
 }
 
 func NewConfigFromFile(path string) *Config {
