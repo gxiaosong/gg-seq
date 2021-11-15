@@ -8,3 +8,7 @@ type IdGenerator interface {
 type IdGeneratorFactory interface {
 	GetIdGenerator(bizType string) IdGenerator
 }
+
+type SegmentService interface {
+	GetNextSegment(bizType string) *Segment
+}
