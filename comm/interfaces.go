@@ -1,6 +1,10 @@
 package comm
 
 type IdGenerator interface {
-	GetId(bizType string) uint64
-	GetIds(bizType string) []uint64
+	GetId() uint64
+	GetIds(size int) []uint64
+}
+
+type IdGeneratorFactory interface {
+	GetIdGenerator(bizType string) IdGenerator
 }

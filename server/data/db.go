@@ -9,7 +9,6 @@ import (
 
 const (
 	DB1 = "db1"
-	TX  = "tx"
 )
 
 type Data struct {
