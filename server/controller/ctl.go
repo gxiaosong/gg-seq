@@ -7,9 +7,11 @@ import (
 	"strconv"
 
 	"github.com/gouez/gg-seq/comm"
+	"github.com/gouez/gg-seq/server/data"
+	"github.com/gouez/gg-seq/server/service"
 )
 
-func GetHandlers(idGeneratorFactory comm.IdGeneratorFactory) map[string]http.HandlerFunc {
+func GetHandlers(data *data.Data, idGeneratorFactory comm.IdGeneratorFactory) map[string]http.HandlerFunc {
 	handlers := make(map[string]http.HandlerFunc)
 
 	handlers["/get"] = func(rw http.ResponseWriter, r *http.Request) {
@@ -29,5 +31,17 @@ func GetHandlers(idGeneratorFactory comm.IdGeneratorFactory) map[string]http.Han
 		}
 		rw.Write([]byte(v))
 	}
+
+	handlers["/getSegment"] = func(rw http.ResponseWriter, r *http.Request) {
+		bizType := r.URL.Query().Get("bizType")
+		service := service.NewDBSegmentService(data)
+		s := service.GetNextSegment(bizType)
+		v, err := json.Marshal(s)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		rw.Write([]byte(v))
+	}
+
 	return handlers
 }

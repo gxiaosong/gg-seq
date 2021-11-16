@@ -12,5 +12,5 @@ func main() {
 	conf := config.NewConfigFromFile("config.json")
 	data := data.NewData(conf)
 	idgen := service.NewIdGeneratorFactory(data)
-	server.RunHttpServer(conf.Server, controller.GetHandlers(idgen))
+	server.RunHttpServer(conf.Server, controller.GetHandlers(data, idgen))
 }
