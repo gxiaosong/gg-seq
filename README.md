@@ -8,7 +8,7 @@ git clone https://github.com/gouez/gg-seq.git
 
 ## config
 
-```json
+```shell
 config.json
 ```
 
