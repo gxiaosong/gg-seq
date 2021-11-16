@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/gouez/gg-seq/comm"
+	"github.com/gouez/gg-seq/server/data"
 )
 
 type defaultIdGeneratorFactory struct {
@@ -12,10 +13,10 @@ type defaultIdGeneratorFactory struct {
 	service comm.SegmentService
 }
 
-func NewIdGeneratorFactory(service comm.SegmentService) comm.IdGeneratorFactory {
+func NewIdGeneratorFactory(data *data.Data) comm.IdGeneratorFactory {
 	return &defaultIdGeneratorFactory{
 		cache:   make(map[string]comm.IdGenerator),
-		service: service,
+		service: NewDBSegmentService(data),
 	}
 }
 

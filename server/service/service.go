@@ -3,15 +3,16 @@ package service
 import (
 	"github.com/gouez/gg-seq/comm"
 	"github.com/gouez/gg-seq/server/dao"
+	"github.com/gouez/gg-seq/server/data"
 )
 
 type DBSegmentService struct {
 	dao dao.SegmentDao
 }
 
-func NewDBSegmentService(dao dao.SegmentDao) DBSegmentService {
+func NewDBSegmentService(data *data.Data) DBSegmentService {
 	return DBSegmentService{
-		dao: dao,
+		dao: dao.NewSegmentDao(data),
 	}
 }
 

@@ -8,7 +8,7 @@ type cacheIdGenerator struct {
 	current       *Segment
 	next          *Segment
 	isLoadingNext bool
-	mu            sync.Mutex
+	rw            sync.Mutex
 }
 
 func NewCacheIdGenerator(bizType string, service SegmentService) IdGenerator {
@@ -22,6 +22,8 @@ func NewCacheIdGenerator(bizType string, service SegmentService) IdGenerator {
 }
 
 func (c *cacheIdGenerator) loadCurrent() {
+	c.rw.Lock()
+	defer c.rw.Unlock()
 	if c.current == nil || !c.current.Useful() {
 		if c.next == nil {
 			s := c.querySegment()
@@ -34,8 +36,8 @@ func (c *cacheIdGenerator) loadCurrent() {
 }
 func (c *cacheIdGenerator) loadNext() {
 	if c.next == nil && !c.isLoadingNext {
-		c.mu.Lock()
-		defer c.mu.Unlock()
+		c.rw.Lock()
+		defer c.rw.Unlock()
 		if c.next == nil && !c.isLoadingNext {
 			c.isLoadingNext = true
 			go func() {

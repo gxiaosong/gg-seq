@@ -3,7 +3,6 @@ package dao
 import (
 	"context"
 	"database/sql"
-	"log"
 	"time"
 
 	"github.com/gouez/gg-seq/server/data"
@@ -44,7 +43,7 @@ func (dao SegmentDao) GetNextSegment(bizType string, retryCount int) *Segment {
 
 	defer func() {
 		if err != nil {
-			log.Println(err)
+			panic(err)
 		}
 	}()
 
